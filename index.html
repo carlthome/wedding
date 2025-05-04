@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Seating Chart</title>
+    <style>
+      @page {
+        size: 420mm 594mm; /* A2 Portrait */
+        margin: 20mm;
+      }
+      @media print {
+        .no-print {
+          display: none;
+        }
+
+        body {
+          background: white;
+          color: black;
+        }
+      }
+      body {
+        font-family: cursive;
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        background-color: #fafafa;
+      }
+      .container {
+        margin: 0 auto;
+        padding: 2em;
+        height: 100%;
+        max-width: 420mm;
+        max-height: 594mm;
+      }
+      .seating-chart {
+        display: flex;
+        padding: 1em;
+      }
+
+      .table {
+        background-color: white;
+        border: 1px solid black;
+        min-height: 4em;
+        min-width: 4em;
+      }
+      .table-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
+      .seat {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        min-height: 4em;
+        border-radius: 2em;
+        margin: 0.1em;
+        border: 1px solid black;
+        background: white;
+      }
+
+      .guest-tables {
+        display: flex;
+        flex: 0.8;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .guest-tables .table {
+        width: 100%;
+        border-right: white;
+        z-index: 2;
+      }
+      .guest-table {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+      }
+      .guest-tables label {
+        position: absolute;
+        left: 0;
+        rotate: -90deg;
+        font-size: 0.9em;
+      }
+
+      .host-table {
+        display: flex;
+        flex: 0.2;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .host-table > div {
+        display: flex;
+        flex-direction: row;
+      }
+      .host-table .table-row {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+      }
+      .host-table .table-row .seat {
+        rotate: -45deg;
+      }
+
+      .entrance {
+        text-align: center;
+      }
+
+      .kitchen {
+        text-align: left;
+      }
+
+      .seat {
+        position: relative;
+      }
+      .seat .preferences {
+        position: absolute;
+        bottom: 0;
+        display: flex;
+      }
+      .preferences > div::after {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1em;
+        height: 1em;
+        margin: 0.1em;
+        font-family: monospace;
+        font-size: 0.7em;
+        padding: 0.5em;
+        border-radius: 50%;
+      }
+      .vegetarian::after {
+        content: "V";
+        background-color: lightgreen;
+        border: 1px solid darkgreen;
+      }
+      .nonalcoholic::after {
+        content: "NA";
+        background-color: lightblue;
+        border: 1px solid darkblue;
+      }
+      .vegan::after {
+        content: "VG";
+        background-color: pink;
+        border: 1px solid darkred;
+      }
+      .glutenfree::after {
+        content: "GF";
+        background-color: yellow;
+        border: 1px solid darkgoldenrod;
+      }
+      .legend {
+        display: flex;
+        align-items: center;
+        margin: 1em;
+        padding: 1em;
+        border: 1px solid black;
+      }
+      .legend > .preferences {
+        display: flex;
+        justify-content: space-evenly;
+        flex: 1;
+      }
+      .legend > .preferences > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="kitchen">Kitchen</div>
+      <div class="seating-chart">
+        <div class="guest-tables">
+          <div class="guest-table">
+            <label>Table 1</label>
+            <div class="table-row">
+              <div class="seat">Nicolas</div>
+              <div class="seat">Amund</div>
+              <div class="seat">Anna</div>
+              <div class="seat">Carlos</div>
+              <div class="seat">Emmanouil</div>
+              <div class="seat">Ariadna</div>
+            </div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">Elena</div>
+              <div class="seat">Alexandra</div>
+              <div class="seat">Ersin</div>
+              <div class="seat">Günay</div>
+              <div class="seat">Oriol</div>
+              <div class="seat">Beici</div>
+            </div>
+          </div>
+
+          <div class="guest-table">
+            <label>Table 2</label>
+            <div class="table-row">
+              <div class="seat">Julia B</div>
+              <div class="seat">Sissel</div>
+              <div class="seat">Lois</div>
+              <div class="seat">Felicia</div>
+              <div class="seat">Madeleine</div>
+              <div class="seat"></div>
+            </div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">Amanda E</div>
+              <div class="seat">Fredrik N</div>
+              <div class="seat">Hanna R</div>
+              <div class="seat">David</div>
+              <div class="seat">John A</div>
+              <div class="seat"></div>
+            </div>
+          </div>
+
+          <div class="guest-table">
+            <label>Table 3</label>
+            <div class="table-row">
+              <div class="seat">Nikita</div>
+              <div class="seat">
+                Josephine
+                <div class="preferences">
+                  <div class="vegetarian"></div>
+                </div>
+              </div>
+              <div class="seat">Fredrik L</div>
+              <div class="seat">
+                Philip
+                <div class="preferences">
+                  <div class="nonalcoholic"></div>
+                  <div class="glutenfree"></div>
+                  <div class="vegan"></div>
+                </div>
+              </div>
+              <div class="seat">Lovisa</div>
+              <div class="seat">Eskil</div>
+            </div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">
+                Darren
+                <div class="preferences">
+                  <div class="vegetarian"></div>
+                  <div class="nonalcoholic"></div>
+                </div>
+              </div>
+              <div class="seat">Philipp</div>
+              <div class="seat">Amanda G</div>
+              <div class="seat">Tristan</div>
+              <div class="seat">Prafful</div>
+              <div class="seat">Hayne</div>
+            </div>
+          </div>
+
+          <div class="guest-table">
+            <label>Table 4</label>
+            <div class="table-row">
+              <div class="seat">Martin</div>
+              <div class="seat">Melis</div>
+              <div class="seat">Karolina</div>
+              <div class="seat">Sarah</div>
+              <div class="seat">Joakim W</div>
+              <div class="seat">Annefrid</div>
+            </div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">Elin</div>
+              <div class="seat">John P</div>
+              <div class="seat">Joel</div>
+              <div class="seat">Björn G</div>
+              <div class="seat">Emanuel</div>
+              <div class="seat">Giorgos</div>
+            </div>
+          </div>
+
+          <div class="guest-table">
+            <label>Table 5</label>
+            <div class="table-row">
+              <div class="seat"></div>
+              <div class="seat">Hanna G</div>
+              <div class="seat">Gustav</div>
+              <div class="seat">Elin L</div>
+              <div class="seat">Hedvig</div>
+              <div class="seat">Nelly</div>
+            </div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">Fredrika</div>
+              <div class="seat">Jakob</div>
+              <div class="seat">Siri</div>
+              <div class="seat">Petter</div>
+              <div class="seat">Alex</div>
+              <div class="seat">Jon</div>
+            </div>
+          </div>
+
+          <div class="guest-table">
+            <label>Table 6</label>
+            <div class="table-row">
+              <div class="seat">Linus</div>
+              <div class="seat">Agnes</div>
+              <div class="seat">Omar</div>
+              <div class="seat">Julia H</div>
+              <div class="seat">Oliver</div>
+              <div class="seat">Erik?</div>
+            </div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">Civeny</div>
+              <div class="seat">Björn M</div>
+              <div class="seat">Emilia</div>
+              <div class="seat">Axel</div>
+              <div class="seat">Daniel</div>
+              <div class="seat">Alma</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="host-table">
+          <div class="seat">Joakim J</div>
+          <div>
+            <div class="table"></div>
+            <div class="table-row">
+              <div class="seat">Carina</div>
+              <div class="seat">Rasmus</div>
+              <div class="seat">Sandra</div>
+              <div class="seat">Bo T</div>
+              <div class="seat">Alfred</div>
+              <div class="seat">Barbro</div>
+              <div class="seat">Magnus</div>
+              <div class="seat">Jessica</div>
+              <div class="seat">Carl</div>
+              <div class="seat">Hanna</div>
+              <div class="seat">Lennart</div>
+              <div class="seat">Christina</div>
+              <div class="seat">Rebecca</div>
+              <div class="seat">Julia</div>
+              <div class="seat">Andreas</div>
+              <div class="seat">Bengt</div>
+              <div class="seat">Gunnel</div>
+              <div class="seat">Bo R</div>
+            </div>
+          </div>
+          <div class="seat">Anna-Karin</div>
+        </div>
+      </div>
+      <div class="entrance">Entrance</div>
+      <div class="legend">
+        <div class="preferences">
+          <div class="vegetarian">Vegetarian</div>
+          <div class="nonalcoholic">Non-alcoholic</div>
+          <div class="vegan">Vegan</div>
+          <div class="glutenfree">Gluten-free</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

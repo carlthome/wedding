@@ -6,89 +6,141 @@
     <title>Wedding Seating Chart</title>
     <style>
       @page {
-        size: 420mm 594mm; /* A2 Portrait */
-        margin: 20mm;
+        size: 420mm 594mm portrait; /* A2 Portrait */
+        margin: 0;
       }
       @media print {
-        .no-print {
-          display: none;
-        }
-
-        body {
+        body,
+        html {
+          margin: 0;
+          padding: 0;
           background: white;
           color: black;
         }
+        * {
+          box-shadow: none !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        button {
+          display: none !important;
+        }
       }
+
       body {
         font-family: cursive;
-        font-size: 1em;
+        font-size: 0.5cm;
         margin: 0;
         padding: 0;
-        background-color: #fafafa;
+        background: black;
       }
       .container {
         margin: 0 auto;
-        padding: 2em;
-        height: 100%;
-        max-width: 420mm;
-        max-height: 594mm;
+        padding: 3em;
+        background: whitesmoke;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .printout {
+        position: relative;
+        width: 420mm;
+        height: 594mm;
+        margin: 0;
+        padding: 3cm;
+        background: white;
+        box-shadow: 0 0 1em rgba(0, 0, 0, 0.5);
+        box-sizing: border-box;
+        page-break-inside: avoid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
       }
       .seating-chart {
         display: flex;
-        padding: 1em;
       }
-
       .table {
-        background-color: white;
-        border: 1px solid black;
+        background-color: bisque;
+        border: 0.1cm solid blanchedalmond;
+        border-radius: 0.1em;
         min-height: 4em;
         min-width: 4em;
       }
       .table-row {
         display: flex;
         flex-direction: row;
-        justify-content: space-evenly;
+        justify-content: space-between;
       }
       .seat {
         display: flex;
-        flex: 1;
         align-items: center;
         justify-content: center;
         min-height: 4em;
+        min-width: 4em;
         border-radius: 2em;
-        margin: 0.1em;
-        border: 1px solid black;
+        margin: 0.1cm;
+        border: 0cm solid burlywood;
         background: white;
+      }
+      .seat:nth-child(even) {
+        background-color: lavenderblush;
+      }
+      .seat:nth-child(odd) {
+        background-color: lavender;
+      }
+
+      .host-table .seat {
+        border-left-color: white;
+      }
+      .host-table .seat:first-child {
+        border-left-color: burlywood;
+        border-bottom-color: white;
+      }
+      .host-table .seat:last-child {
+        border-left-color: burlywood;
+        border-top-color: white;
+      }
+      .guest-tables .table-row:nth-child(2) .seat {
+        border-bottom-color: white;
+      }
+      .guest-tables .table-row:nth-child(4) .seat {
+        border-top-color: white;
       }
 
       .guest-tables {
         display: flex;
-        flex: 0.8;
         flex-direction: column;
         justify-content: space-between;
       }
       .guest-tables .table {
         width: 100%;
-        border-right: white;
+        border-right: transparent;
         z-index: 2;
       }
       .guest-table {
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+        position: relative;
       }
-      .guest-tables label {
+      .guest-table label {
         position: absolute;
-        left: 0;
-        rotate: -90deg;
+        left: 50%;
         font-size: 0.9em;
+        font-family: sans-serif;
+        z-index: 3;
       }
 
       .host-table {
         display: flex;
-        flex: 0.2;
         flex-direction: column;
         justify-content: space-between;
+        align-items: flex-start;
       }
       .host-table > div {
         display: flex;
@@ -99,16 +151,27 @@
         flex-direction: column;
         justify-content: space-evenly;
       }
-      .host-table .table-row .seat {
-        rotate: -45deg;
-      }
-
       .entrance {
-        text-align: center;
+        font-family: sans-serif;
+        padding: 1em;
+        position: absolute;
+        left: 50%;
+        bottom: 0;
       }
-
       .kitchen {
-        text-align: left;
+        font-family: sans-serif;
+        padding: 1em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+      }
+      .speaker {
+        font-family: sans-serif;
+        padding: 1em;
+        position: absolute;
+        top: 50%;
+        left: 0;
       }
 
       .seat {
@@ -121,14 +184,15 @@
       }
       .preferences > div::after {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
         width: 1em;
         height: 1em;
-        margin: 0.1em;
+        margin: 1em 0.1em;
         font-family: monospace;
-        font-size: 0.7em;
-        padding: 0.5em;
+        font-size: 0.5em;
+        padding: 0.3em;
         border-radius: 50%;
       }
       .vegetarian::after {
@@ -151,213 +215,517 @@
         background-color: yellow;
         border: 1px solid darkgoldenrod;
       }
+      .lactosefree::after {
+        content: "LF";
+        background-color: lightcoral;
+        border: 1px solid darkred;
+      }
       .legend {
+        position: absolute;
+        bottom: 0;
+        right: 0;
         display: flex;
         align-items: center;
         margin: 1em;
         padding: 1em;
         border: 1px solid black;
       }
-      .legend > .preferences {
-        display: flex;
-        justify-content: space-evenly;
-        flex: 1;
-      }
       .legend > .preferences > div {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
         gap: 0.5em;
+      }
+
+      .seat.dragging {
+        opacity: 0.5;
+        border: 2px dashed #000;
+      }
+
+      button {
+        cursor: pointer;
+        margin: 1em auto;
+        padding: 0.8em 1.5em;
+        font-size: 1em;
+        font-weight: bold;
+        color: white;
+        border: none;
+        border-radius: 0.5em;
+      }
+      .print-button {
+        background-color: #4caf50;
+        transition: background-color 0.3s;
+      }
+      .print-button:hover {
+        background-color: #45a049;
+      }
+      .reset-button {
+        background-color: #f44336;
+        transition: background-color 0.3s;
+      }
+      .reset-button:hover {
+        background-color: #d32f2f;
+      }
+
+      .seat-menu-btn {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        bottom: 0;
+        right: 0;
+      }
+      .pref-menu {
+        position: absolute;
+        top: 0;
+        background: white;
+        border: 1px solid black;
+        padding: 0.5em;
+        z-index: 1000;
+      }
+      .pref-menu-item {
+        display: block;
+        margin-bottom: 0.25em;
+      }
+      .seat-edit-input {
+        width: 90%;
+        font-family: inherit;
+        font-size: inherit;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="kitchen">Kitchen</div>
-      <div class="seating-chart">
-        <div class="guest-tables">
-          <div class="guest-table">
-            <label>Table 1</label>
-            <div class="table-row">
-              <div class="seat">Nicolas</div>
-              <div class="seat">Amund</div>
-              <div class="seat">Anna</div>
-              <div class="seat">Carlos</div>
-              <div class="seat">Emmanouil</div>
-              <div class="seat">Ariadna</div>
-            </div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">Elena</div>
-              <div class="seat">Alexandra</div>
-              <div class="seat">Ersin</div>
-              <div class="seat">Günay</div>
-              <div class="seat">Oriol</div>
-              <div class="seat">Beici</div>
-            </div>
-          </div>
+      <div class="printout">
+        <h1>Wedding Seating Chart</h1>
+        <div class="kitchen"><h2>Kitchen</h2></div>
 
-          <div class="guest-table">
-            <label>Table 2</label>
-            <div class="table-row">
-              <div class="seat">Julia B</div>
-              <div class="seat">Sissel</div>
-              <div class="seat">Lois</div>
-              <div class="seat">Felicia</div>
-              <div class="seat">Madeleine</div>
-              <div class="seat"></div>
-            </div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">Amanda E</div>
-              <div class="seat">Fredrik N</div>
-              <div class="seat">Hanna R</div>
-              <div class="seat">David</div>
-              <div class="seat">John A</div>
-              <div class="seat"></div>
-            </div>
-          </div>
+        <div class="speaker"><h2>Speaker</h2></div>
 
-          <div class="guest-table">
-            <label>Table 3</label>
-            <div class="table-row">
-              <div class="seat">Nikita</div>
-              <div class="seat">
-                Josephine
-                <div class="preferences">
-                  <div class="vegetarian"></div>
-                </div>
+        <div class="seating-chart">
+          <div class="guest-tables">
+            <div class="guest-table">
+              <label>Table 1</label>
+              <div class="table-row">
+                <div class="seat">Nicolas</div>
+                <div class="seat">Amund</div>
+                <div class="seat">Anna</div>
+                <div class="seat">Carlos</div>
+                <div class="seat">Emmanouil</div>
+                <div class="seat">Ariadna</div>
               </div>
-              <div class="seat">Fredrik L</div>
-              <div class="seat">
-                Philip
-                <div class="preferences">
-                  <div class="nonalcoholic"></div>
-                  <div class="glutenfree"></div>
-                  <div class="vegan"></div>
-                </div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">Elena</div>
+                <div class="seat">Alexandra</div>
+                <div class="seat">Ersin</div>
+                <div class="seat">Günay</div>
+                <div class="seat">Oriol</div>
+                <div class="seat">Beici</div>
               </div>
-              <div class="seat">Lovisa</div>
-              <div class="seat">Eskil</div>
             </div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">
-                Darren
-                <div class="preferences">
-                  <div class="vegetarian"></div>
-                  <div class="nonalcoholic"></div>
-                </div>
+
+            <div class="guest-table">
+              <label>Table 2</label>
+              <div class="table-row">
+                <div class="seat">Julia B</div>
+                <div class="seat">Sissel</div>
+                <div class="seat">Lois</div>
+                <div class="seat">Felicia</div>
+                <div class="seat">Madeleine</div>
+                <div class="seat"></div>
               </div>
-              <div class="seat">Philipp</div>
-              <div class="seat">Amanda G</div>
-              <div class="seat">Tristan</div>
-              <div class="seat">Prafful</div>
-              <div class="seat">Hayne</div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">Amanda E</div>
+                <div class="seat">Fredrik N</div>
+                <div class="seat">Hanna R</div>
+                <div class="seat">David</div>
+                <div class="seat">John A</div>
+                <div class="seat"></div>
+              </div>
+            </div>
+
+            <div class="guest-table">
+              <label>Table 3</label>
+              <div class="table-row">
+                <div class="seat">Nikita</div>
+                <div class="seat">
+                  Josephine
+                  <div class="preferences">
+                    <div class="vegetarian"></div>
+                  </div>
+                </div>
+                <div class="seat">Fredrik L</div>
+                <div class="seat">
+                  Philip
+                  <div class="preferences">
+                    <div class="nonalcoholic"></div>
+                    <div class="glutenfree"></div>
+                    <div class="lactosefree"></div>
+                    <div class="vegan"></div>
+                  </div>
+                </div>
+                <div class="seat">Lovisa</div>
+                <div class="seat">Eskil</div>
+              </div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">
+                  Darren
+                  <div class="preferences">
+                    <div class="vegetarian"></div>
+                    <div class="nonalcoholic"></div>
+                  </div>
+                </div>
+                <div class="seat">Philipp</div>
+                <div class="seat">Amanda G</div>
+                <div class="seat">Tristan</div>
+                <div class="seat">Prafful</div>
+                <div class="seat">Hayne</div>
+              </div>
+            </div>
+
+            <div class="guest-table">
+              <label>Table 4</label>
+              <div class="table-row">
+                <div class="seat">Martin</div>
+                <div class="seat">Melis</div>
+                <div class="seat">Karolina</div>
+                <div class="seat">Sarah</div>
+                <div class="seat">Joakim W</div>
+                <div class="seat">Annefrid</div>
+              </div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">Elin</div>
+                <div class="seat">John P</div>
+                <div class="seat">Joel</div>
+                <div class="seat">Björn G</div>
+                <div class="seat">Emanuel</div>
+                <div class="seat">Giorgos</div>
+              </div>
+            </div>
+
+            <div class="guest-table">
+              <label>Table 5</label>
+              <div class="table-row">
+                <div class="seat"></div>
+                <div class="seat">Hanna G</div>
+                <div class="seat">Gustav</div>
+                <div class="seat">Elin L</div>
+                <div class="seat">Hedvig</div>
+                <div class="seat">Nelly</div>
+              </div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">Fredrika</div>
+                <div class="seat">Jakob</div>
+                <div class="seat">Siri</div>
+                <div class="seat">Petter</div>
+                <div class="seat">Alex</div>
+                <div class="seat">Jon</div>
+              </div>
+            </div>
+
+            <div class="guest-table">
+              <label>Table 6</label>
+              <div class="table-row">
+                <div class="seat">Linus</div>
+                <div class="seat">Agnes</div>
+                <div class="seat">Omar</div>
+                <div class="seat">Julia H</div>
+                <div class="seat">Oliver</div>
+                <div class="seat">Erik</div>
+              </div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">Civeny</div>
+                <div class="seat">Björn M</div>
+                <div class="seat">Emilia</div>
+                <div class="seat">Axel</div>
+                <div class="seat">Daniel</div>
+                <div class="seat">Alma</div>
+              </div>
             </div>
           </div>
 
-          <div class="guest-table">
-            <label>Table 4</label>
-            <div class="table-row">
-              <div class="seat">Martin</div>
-              <div class="seat">Melis</div>
-              <div class="seat">Karolina</div>
-              <div class="seat">Sarah</div>
-              <div class="seat">Joakim W</div>
-              <div class="seat">Annefrid</div>
+          <div class="host-table">
+            <div class="seat">Joakim J</div>
+            <div>
+              <div class="table"></div>
+              <div class="table-row">
+                <div class="seat">Carina</div>
+                <div class="seat">Rasmus</div>
+                <div class="seat">Sandra</div>
+                <div class="seat">Bo T</div>
+                <div class="seat">Alfred</div>
+                <div class="seat">Barbro</div>
+                <div class="seat">Magnus</div>
+                <div class="seat">Jessica</div>
+                <div class="seat">Carl</div>
+                <div class="seat">Hanna</div>
+                <div class="seat">Lennart</div>
+                <div class="seat">Christina</div>
+                <div class="seat">Rebecca</div>
+                <div class="seat">Julia</div>
+                <div class="seat">Andreas</div>
+                <div class="seat">Bengt</div>
+                <div class="seat">Gunnel</div>
+                <div class="seat">Bo R</div>
+              </div>
             </div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">Elin</div>
-              <div class="seat">John P</div>
-              <div class="seat">Joel</div>
-              <div class="seat">Björn G</div>
-              <div class="seat">Emanuel</div>
-              <div class="seat">Giorgos</div>
-            </div>
-          </div>
-
-          <div class="guest-table">
-            <label>Table 5</label>
-            <div class="table-row">
-              <div class="seat"></div>
-              <div class="seat">Hanna G</div>
-              <div class="seat">Gustav</div>
-              <div class="seat">Elin L</div>
-              <div class="seat">Hedvig</div>
-              <div class="seat">Nelly</div>
-            </div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">Fredrika</div>
-              <div class="seat">Jakob</div>
-              <div class="seat">Siri</div>
-              <div class="seat">Petter</div>
-              <div class="seat">Alex</div>
-              <div class="seat">Jon</div>
-            </div>
-          </div>
-
-          <div class="guest-table">
-            <label>Table 6</label>
-            <div class="table-row">
-              <div class="seat">Linus</div>
-              <div class="seat">Agnes</div>
-              <div class="seat">Omar</div>
-              <div class="seat">Julia H</div>
-              <div class="seat">Oliver</div>
-              <div class="seat">Erik?</div>
-            </div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">Civeny</div>
-              <div class="seat">Björn M</div>
-              <div class="seat">Emilia</div>
-              <div class="seat">Axel</div>
-              <div class="seat">Daniel</div>
-              <div class="seat">Alma</div>
-            </div>
+            <div class="seat">Anna-Karin</div>
           </div>
         </div>
 
-        <div class="host-table">
-          <div class="seat">Joakim J</div>
-          <div>
-            <div class="table"></div>
-            <div class="table-row">
-              <div class="seat">Carina</div>
-              <div class="seat">Rasmus</div>
-              <div class="seat">Sandra</div>
-              <div class="seat">Bo T</div>
-              <div class="seat">Alfred</div>
-              <div class="seat">Barbro</div>
-              <div class="seat">Magnus</div>
-              <div class="seat">Jessica</div>
-              <div class="seat">Carl</div>
-              <div class="seat">Hanna</div>
-              <div class="seat">Lennart</div>
-              <div class="seat">Christina</div>
-              <div class="seat">Rebecca</div>
-              <div class="seat">Julia</div>
-              <div class="seat">Andreas</div>
-              <div class="seat">Bengt</div>
-              <div class="seat">Gunnel</div>
-              <div class="seat">Bo R</div>
-            </div>
+        <div class="entrance"><h2>Entrance</h2></div>
+
+        <div class="legend">
+          <div class="preferences">
+            <div class="vegetarian">Vegetarian</div>
+            <div class="nonalcoholic">Non-alcoholic</div>
+            <div class="vegan">Vegan</div>
+            <div class="glutenfree">Gluten-free</div>
+            <div class="lactosefree">Lactose-free</div>
           </div>
-          <div class="seat">Anna-Karin</div>
         </div>
       </div>
-      <div class="entrance">Entrance</div>
-      <div class="legend">
-        <div class="preferences">
-          <div class="vegetarian">Vegetarian</div>
-          <div class="nonalcoholic">Non-alcoholic</div>
-          <div class="vegan">Vegan</div>
-          <div class="glutenfree">Gluten-free</div>
-        </div>
-      </div>
+
+      <button class="no-print print-button" onclick="window.print()">
+        Print
+      </button>
+      <button class="no-print reset-button" onclick="resetSeatingChart()">
+        Reset
+      </button>
     </div>
+
+    <script>
+      let draggedSeat = null;
+
+      const preferenceTypes = [
+        "vegetarian",
+        "vegan",
+        "glutenfree",
+        "lactosefree",
+        "nonalcoholic",
+      ];
+
+      const seatSelector = ".seat";
+
+      function createPreferencesContainer(seat) {
+        let container = seat.querySelector(".preferences");
+        if (!container) {
+          container = document.createElement("div");
+          container.className = "preferences";
+          seat.appendChild(container);
+        }
+        return container;
+      }
+
+      function initializeSeat(seat) {
+        seat.setAttribute("draggable", "true");
+        seat.classList.remove("dragging");
+
+        seat.querySelector(".seat-menu-btn")?.remove();
+
+        const menuBtn = document.createElement("button");
+        menuBtn.textContent = "+";
+        menuBtn.className = "seat-menu-btn";
+        seat.appendChild(menuBtn);
+
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          showPreferenceMenu(seat, menuBtn);
+        });
+
+        seat.addEventListener("dragstart", () => {
+          draggedSeat = seat;
+          seat.classList.add("dragging");
+        });
+
+        seat.addEventListener("dragend", () => {
+          seat.classList.remove("dragging");
+          draggedSeat = null;
+        });
+
+        seat.addEventListener("dragover", (e) => e.preventDefault());
+
+        seat.addEventListener("drop", (e) => {
+          e.preventDefault();
+          if (!draggedSeat || draggedSeat === seat) return;
+
+          const temp = seat.innerHTML;
+          seat.innerHTML = draggedSeat.innerHTML;
+          draggedSeat.innerHTML = temp;
+
+          initializeSeat(seat);
+          initializeSeat(draggedSeat);
+        });
+
+        seat.addEventListener("dblclick", () => startNameEdit(seat));
+      }
+
+      function startNameEdit(seat) {
+        const nameNode = [...seat.childNodes].find(
+          (n) => n.nodeType === Node.TEXT_NODE
+        );
+        const currentName = nameNode ? nameNode.textContent.trim() : "";
+        const preferences = seat.querySelector(".preferences");
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = currentName;
+        input.className = "seat-edit-input";
+
+        seat.innerHTML = "";
+        seat.appendChild(input);
+        input.focus();
+
+        function finishEdit(newName) {
+          seat.innerHTML = newName;
+          if (preferences) seat.appendChild(preferences);
+          initializeSeat(seat);
+        }
+
+        input.addEventListener("blur", () => finishEdit(input.value));
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") input.blur();
+          if (e.key === "Escape") finishEdit(currentName);
+        });
+      }
+
+      function showPreferenceMenu(seat, button) {
+        document.querySelector(".pref-menu")?.remove();
+
+        const menu = document.createElement("div");
+        menu.className = "pref-menu";
+
+        preferenceTypes.forEach((pref) => {
+          const label = document.createElement("label");
+          label.className = "pref-menu-item";
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = seat.querySelector(`.${pref}`) !== null;
+
+          checkbox.addEventListener("change", () => {
+            updatePreference(seat, pref, checkbox.checked);
+          });
+
+          label.appendChild(checkbox);
+          label.appendChild(
+            document.createTextNode(` ${pref[0].toUpperCase()}${pref.slice(1)}`)
+          );
+          menu.appendChild(label);
+        });
+
+        document.body.appendChild(menu);
+
+        const rect = button.getBoundingClientRect();
+        menu.style.left = `${rect.left}px`;
+        menu.style.top = `${rect.bottom}px`;
+
+        setTimeout(() => {
+          document.addEventListener("click", function close(e) {
+            if (!menu.contains(e.target)) {
+              menu.remove();
+              document.removeEventListener("click", close);
+            }
+          });
+        }, 100);
+      }
+
+      function updatePreference(seat, pref, enable) {
+        const container = enable
+          ? createPreferencesContainer(seat)
+          : seat.querySelector(".preferences");
+        if (!container) return;
+
+        const existing = container.querySelector(`.${pref}`);
+        if (enable && !existing) {
+          const icon = document.createElement("div");
+          icon.className = pref;
+          container.appendChild(icon);
+        } else if (!enable && existing) {
+          existing.remove();
+        }
+
+        if (container.childNodes.length === 0) container.remove();
+      }
+
+      function togglePreference(seat, pref) {
+        const container = createPreferencesContainer(seat);
+        const existing = container.querySelector(`.${pref}`);
+        if (existing) {
+          existing.remove();
+        } else {
+          const icon = document.createElement("div");
+          icon.className = pref;
+          container.appendChild(icon);
+        }
+        if (container.childNodes.length === 0) container.remove();
+        saveSeatingChart();
+      }
+
+      function saveSeatingChart() {
+        const seatData = Array.from(
+          document.querySelectorAll(seatSelector)
+        ).map((seat) => ({
+          name: seat.childNodes[0]?.textContent.trim() || "",
+          preferences: Array.from(
+            seat.querySelectorAll(".preferences > div")
+          ).map((div) => div.className),
+        }));
+        localStorage.setItem("weddingSeatingChart", JSON.stringify(seatData));
+      }
+
+      function loadSeatingChart() {
+        const saved = localStorage.getItem("weddingSeatingChart");
+        if (!saved) return;
+
+        const seatData = JSON.parse(saved);
+        document.querySelectorAll(seatSelector).forEach((seat, i) => {
+          const { name = "", preferences = [] } = seatData[i] || {};
+          seat.innerHTML = "";
+          if (name) seat.appendChild(document.createTextNode(name));
+
+          if (preferences.length) {
+            const container = document.createElement("div");
+            container.className = "preferences";
+            preferences.forEach((pref) => {
+              const prefDiv = document.createElement("div");
+              prefDiv.className = pref;
+              container.appendChild(prefDiv);
+            });
+            seat.appendChild(container);
+          }
+        });
+      }
+
+      function resetSeatingChart() {
+        if (confirm("Reset all seat assignments and preferences?")) {
+          localStorage.removeItem("weddingSeatingChart");
+          location.reload();
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        loadSeatingChart();
+        document.querySelectorAll(seatSelector).forEach((seat) => {
+          initializeSeat(seat);
+
+          seat.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            const pref = prompt("Add/remove preference:");
+            if (preferenceTypes.includes(pref)) {
+              togglePreference(seat, pref);
+            }
+          });
+
+          seat.addEventListener("drop", () => setTimeout(saveSeatingChart));
+          seat.addEventListener("dblclick", () => setTimeout(saveSeatingChart));
+        });
+      });
+    </script>
   </body>
 </html>
